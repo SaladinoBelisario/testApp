@@ -3,34 +3,35 @@
 Race Condition
 A data race happens when two goroutines access the same variable concurrently, and at least one of the
 access is a write instruction.
+
+This is an example of race condition in where 2 goroutines tries to read & write sharedInt and there
+is no access control.
 */
 
 package main
 
-import (
-	"fmt"
-	"sync"
-)
+import "time"
 
-var Wait sync.WaitGroup
-var Counter = 0
+var sharedInt = 0
+var unusedValue = 0
 
 func main() {
-	for routine := 1; routine <= 2; routine++ {
-		Wait.Add(1)
-		go RoutineOne(routine)
-	}
-
-	Wait.Wait()
-	fmt.Printf("Final Counter: %d\n", Counter)
+	go runSimpleReader()
+	go runSimpleWriter()
+	time.Sleep(10 * time.Second)
 }
 
-func RoutineOne(id int) {
-	for count := 0; count < 2; count++ {
-		value := Counter
-		//time.Sleep(1 * time.Nanosecond) // Uncomment this line for fix race condition issue
-		value++
-		Counter = value
+func runSimpleReader() {
+	for {
+		var val = sharedInt
+		if val%10 == 0 {
+			unusedValue = unusedValue + 1
+		}
 	}
-	Wait.Done()
+}
+
+func runSimpleWriter() {
+	for {
+		sharedInt = sharedInt + 1
+	}
 }
