@@ -1,0 +1,1 @@
+Programs used as example for learning and understand the Go language features
