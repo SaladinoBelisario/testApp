@@ -3,15 +3,18 @@ package main
 import "fmt"
 
 func main() {
+	var x		 int
 	var numbers []int
 
 	for i := 0; i < 10; i++ {
 		fmt.Print("Enter a number: ")
-		fmt.Scan(&numbers)
+		fmt.Scanln(&x)
+		numbers = append(numbers, x)
 	}
 
 	fmt.Print("Ordering with bubblesort: ")
-	BubbleSort(numbers)
+	sort := BubbleSort(numbers)
+	fmt.Println(sort)
 
 }
 
